@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סדר היום של נעמי 💛</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Suez+One&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF3E6;
+    --surface:#FFFFFF;
+    --ink:#2B3A40;
+    --ink-soft:#5C6E74;
+    --teal:#2C6B5E;
+    --teal-dark:#1F4F45;
+    --teal-pale:#E3EEEA;
+    --mustard:#C97E1E;
+    --mustard-soft:#FBEBD2;
+    --rose:#B85F53;
+    --rose-soft:#F7E3DF;
+    --thread:#C79A66;
+    --line:#E8DCC8;
+    --radius:22px;
+  }
+  *{box-sizing:border-box;}
+  html{font-size:18px;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Rubik',sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Suez One',serif;
+    font-weight:400;
+    margin:0;
+  }
+  button{font-family:inherit;}
+  .app{max-width:560px;margin:0 auto;min-height:100vh;position:relative;}
+
+  /* ---------- Header ---------- */
+  .topbar{padding:28px 20px 18px;text-align:center;}
+  .badge{
+    display:inline-block;
+    background:var(--mustard-soft);
+    color:var(--mustard);
+    border:1.5px solid var(--mustard);
+    border-radius:999px;
+    padding:5px 16px;
+    font-size:0.95rem;
+    font-weight:700;
+    margin-bottom:10px;
+  }
+  .topbar h1{
+    font-size:1.9rem;
+    color:var(--teal-dark);
+    margin-bottom:6px;
+  }
+  .topbar .subtitle{
+    color:var(--ink-soft);
+    font-size:1.05rem;
+    margin:0;
+  }
+
+  /* ---------- Thread timeline (signature element) ---------- */
+  .thread{
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:18px 36px 26px;
+  }
+  .thread::before{
+    content:"";
+    position:absolute;
+    top:24px;
+    right:46px;
+    left:46px;
+    height:0;
+    border-top:3px dashed var(--thread);
+  }
+  .thread-dot{
+    position:relative;
+    z-index:1;
+    background:none;
+    border:none;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    padding:0;
+    color:var(--ink-soft);
+    font-size:0.85rem;
+    font-weight:600;
+  }
+  .thread-dot .circle{
+    width:44px;height:44px;
+    border-radius:50%;
+    background:var(--surface);
+    border:2.5px solid var(--thread);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.3rem;
+    transition:transform .2s, border-color .2s, background .2s;
+  }
+  .thread-dot.active .circle{
+    border-color:var(--teal);
+    background:var(--teal-pale);
+    transform:scale(1.12);
+  }
+  .thread-dot.active{color:var(--teal-dark);}
+  .thread-dot .time{font-size:0.75rem;color:var(--ink-soft);font-weight:500;}
+
+  /* ---------- Content sections ---------- */
+  .content{padding:4px 18px 110px;}
+  .day-section{display:none;animation:fadeIn .35s ease;}
+  .day-section.active{display:block;}
+  @media (prefers-reduced-motion: reduce){
+    .day-section{animation:none;}
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .section-intro{
+    color:var(--ink-soft);
+    font-size:1.05rem;
+    margin:6px 4px 18px;
+  }
+
+  /* ---------- Time cards ---------- */
+  .time-card{
+    background:var(--surface);
+    border-top:4px dashed var(--thread);
+    border-radius:var(--radius);
+    padding:18px 18px 16px;
+    margin-bottom:16px;
+    box-shadow:0 2px 10px rgba(43,58,64,0.06);
+  }
+  .time-card-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:10px;
+  }
+  .time-card-head .icon{
+    font-size:1.9rem;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .time-card-head .titles{flex:1;min-width:0;}
+  .time-badge{
+    display:inline-block;
+    background:var(--mustard-soft);
+    color:var(--mustard);
+    font-weight:700;
+    font-size:0.85rem;
+    border-radius:999px;
+    padding:2px 12px;
+    margin-bottom:4px;
+  }
+  .time-card-head h3{
+    font-size:1.25rem;
+    color:var(--teal-dark);
+  }
+  .time-card p{
+    margin:6px 0;
+    font-size:1.02rem;
+  }
+  .time-card p strong{color:var(--teal-dark);}
+
+  /* ---------- Tips accordion ---------- */
+  .tip-card{
+    background:var(--surface);
+    border-radius:var(--radius);
+    margin-bottom:14px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(43,58,64,0.06);
+    border-top:4px dashed var(--rose);
+  }
+  .tip-toggle{
+    width:100%;
+    background:none;
+    border:none;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:16px 18px;
+    cursor:pointer;
+    text-align:right;
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--teal-dark);
+  }
+  .tip-toggle .icon{font-size:1.6rem;flex-shrink:0;}
+  .tip-toggle .label{flex:1;}
+  .tip-toggle .chev{
+    font-size:1rem;
+    color:var(--rose);
+    transition:transform .25s;
+    flex-shrink:0;
+  }
+  .tip-card.open .chev{transform:rotate(180deg);}
+  .tip-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .3s ease;
+    padding:0 18px;
+  }
+  .tip-card.open .tip-body{padding-bottom:16px;}
+  .tip-body p{margin:0;font-size:1.02rem;color:var(--ink);}
+
+  /* ---------- Shopping list ---------- */
+  .shop-progress{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--teal-pale);
+    border-radius:16px;
+    padding:12px 16px;
+    margin-bottom:18px;
+    font-weight:700;
+    color:var(--teal-dark);
+  }
+  .shop-progress button{
+    background:var(--teal);
+    color:#fff;
+    border:none;
+    border-radius:999px;
+    padding:7px 14px;
+    font-size:0.85rem;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .shop-progress button:active{background:var(--teal-dark);}
+  .shop-note{
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    margin:0 4px 18px;
+  }
+  .shop-category{margin-bottom:20px;}
+  .shop-category h3{
+    font-size:1.15rem;
+    color:var(--teal-dark);
+    margin-bottom:10px;
+  }
+  .shop-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:var(--surface);
+    border-radius:16px;
+    padding:13px 14px;
+    margin-bottom:8px;
+    box-shadow:0 1px 6px rgba(43,58,64,0.05);
+    cursor:pointer;
+  }
+  .shop-item input{
+    width:24px;height:24px;
+    accent-color:var(--teal);
+    flex-shrink:0;
+  }
+  .shop-item span{font-size:1.02rem;}
+  .shop-item.checked-row span{
+    text-decoration:line-through;
+    color:var(--ink-soft);
+  }
+  .prep-category{
+    background:var(--rose-soft);
+    border-radius:var(--radius);
+    padding:16px 14px 6px;
+    margin-top:8px;
+  }
+  .prep-category h3{color:var(--rose);}
+  .prep-category .shop-item{box-shadow:none;border:1.5px solid var(--rose-soft);}
+
+  /* ---------- Bottom tab bar ---------- */
+  .tabbar{
+    position:fixed;
+    bottom:0;left:0;right:0;
+    display:flex;
+    background:var(--surface);
+    border-top:1.5px solid var(--line);
+    padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+    max-width:560px;
+    margin:0 auto;
+    box-shadow:0 -4px 14px rgba(43,58,64,0.07);
+  }
+  .tab{
+    flex:1;
+    background:none;
+    border:none;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    padding:6px 2px;
+    border-radius:14px;
+    color:var(--ink-soft);
+    font-size:0.78rem;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .tab .tab-icon{font-size:1.5rem;}
+  .tab.active{
+    background:var(--teal-pale);
+    color:var(--teal-dark);
+  }
+  .tab:focus-visible,.thread-dot:focus-visible,.tip-toggle:focus-visible,button:focus-visible{
+    outline:3px solid var(--mustard);
+    outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <span class="badge">גיל חצי שנה 👶</span>
+    <h1>סדר היום של נעמי</h1>
+    <p class="subtitle">מדריך קטן לסבתא ולסבא, באהבה 💛</p>
+  </header>
+
+  <nav class="thread" aria-label="קצב היום">
+    <button class="thread-dot active" data-target="morning">
+      <span class="circle">☀️</span>
+      <span class="label">בוקר</span>
+      <span class="time">06:00–07:00</span>
+    </button>
+    <button class="thread-dot" data-target="noon">
+      <span class="circle">🌤️</span>
+      <span class="label">צהריים</span>
+      <span class="time">11:30</span>
+    </button>
+    <button class="thread-dot" data-target="evening">
+      <span class="circle">🌙</span>
+      <span class="label">ערב</span>
+      <span class="time">18:30</span>
+    </button>
+  </nav>
+
+  <main class="content">
+
+    <!-- ===== MORNING ===== -->
+    <section id="morning" class="day-section active">
+      <p class="section-intro">הבוקר שלה מתחיל מוקדם, עם הרבה חיבה ותנועה 🌞</p>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🌅</span>
+          <div class="titles">
+            <span class="time-badge">06:00 / 06:30 / 07:00</span>
+            <h3>התעוררות וטקס בוקר</h3>
+          </div>
+        </div>
+        <p>שעת ההתעוררות גמישה – יכולה להיות ב-6:00, ב-6:30 או ב-7:00, לפי איך שהיא מתעוררת.</p>
+        <p>טקס הבוקר נמשך כ-10 דקות וכולל החלפת חיתול ופתיחת היום בנעימים.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🍼</span>
+          <div class="titles">
+            <span class="time-badge">10 דקות אחרי ההתעוררות</span>
+            <h3>ארוחת בוקר ראשונה</h3>
+          </div>
+        </div>
+        <p>הנקה או בקבוק – 180 מ"ל. לא מיד עם ההתעוררות, אלא כ-10 דקות אחריה (אחרי טקס הבוקר).</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🧸</span>
+          <div class="titles">
+            <span class="time-badge">06:30–08:00</span>
+            <h3>זמן איכות</h3>
+          </div>
+        </div>
+        <p>משחק, פעילות וטיול בעגלה.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🍌</span>
+          <div class="titles">
+            <span class="time-badge">08:00</span>
+            <h3>ארוחת בוקר – מוצקים</h3>
+          </div>
+        </div>
+        <p><strong>פירות:</strong> בננה, תפוח, תות, שזיף, אגס או תמר.</p>
+        <p><strong>תוספות:</strong> חמאת שקדים, ממרח אגוזים או טחינה גולמית.</p>
+        <p><strong>דגנים:</strong> קינואה מבושלת, שיבולת שועל (טחונה או מבושלת), או אבקת דגנים.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">😴</span>
+          <div class="titles">
+            <span class="time-badge">08:15–08:30</span>
+            <h3>שנת בוקר</h3>
+          </div>
+        </div>
+        <p>משכיבים כ-15 דקות לאחר סיום האוכל.</p>
+      </div>
+    </section>
+
+    <!-- ===== NOON ===== -->
+    <section id="noon" class="day-section">
+      <p class="section-intro">אחרי הבוקר העמוס – ארוחה משביעה ושנת צהריים ארוכה 🌤️</p>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🧸</span>
+          <div class="titles">
+            <span class="time-badge">עד 11:30</span>
+            <h3>משחק ופעילות</h3>
+          </div>
+        </div>
+        <p>זמן חופשי למשחק לפני ארוחת הצהריים.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🍗</span>
+          <div class="titles">
+            <span class="time-badge">11:30</span>
+            <h3>ארוחת צהריים</h3>
+          </div>
+        </div>
+        <p>ירקות מבושלים (לא מרוסקים לגמרי) עם עוף.</p>
+        <p><strong>תוספת:</strong> שיבולת שועל או אבקת דגנים.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">😴</span>
+          <div class="titles">
+            <span class="time-badge">11:45</span>
+            <h3>שנת צהריים</h3>
+          </div>
+        </div>
+        <p>משכיבים כ-15 דקות לאחר האוכל. זו שנת הצהריים הארוכה – כשעתיים בערך.</p>
+      </div>
+    </section>
+
+    <!-- ===== EVENING ===== -->
+    <section id="evening" class="day-section">
+      <p class="section-intro">אחר הצהריים רגוע, ולקראת הערב – טקס מתוק שמכין אותה לשינה 🌙</p>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🍼</span>
+          <div class="titles">
+            <span class="time-badge">14:00</span>
+            <h3>ארוחה</h3>
+          </div>
+        </div>
+        <p>הנקה או בקבוק – 180 מ"ל.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🍎</span>
+          <div class="titles">
+            <span class="time-badge">אחרי הארוחה</span>
+            <h3>ארוחת ביניים</h3>
+          </div>
+        </div>
+        <p>מנה קטנה של פרי או ירק.</p>
+        <p>אפשרות נוספת: מרק ירקות או מרק קרם.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🍼</span>
+          <div class="titles">
+            <span class="time-badge">17:00</span>
+            <h3>ארוחה</h3>
+          </div>
+        </div>
+        <p>הנקה או בקבוק – 180 מ"ל.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🛁</span>
+          <div class="titles">
+            <span class="time-badge">17:45</span>
+            <h3>מקלחת</h3>
+          </div>
+        </div>
+        <p>זמן רחצה.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🍼</span>
+          <div class="titles">
+            <span class="time-badge">18:00</span>
+            <h3>ארוחה אחרונה</h3>
+          </div>
+        </div>
+        <p>הנקה או בקבוק – 60 מ"ל.</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">📖</span>
+          <div class="titles">
+            <span class="time-badge">18:20</span>
+            <h3>טקס ערב</h3>
+          </div>
+        </div>
+        <p>עיסוי, שיר, סיפור, פטפוט, חיבוקים ונשיקות – מה שבא 💛</p>
+      </div>
+
+      <div class="time-card">
+        <div class="time-card-head">
+          <span class="icon">🌙</span>
+          <div class="titles">
+            <span class="time-badge">18:30</span>
+            <h3>השכבה לשנת לילה</h3>
+          </div>
+        </div>
+        <p>זמן לשנת לילה טובה.</p>
+      </div>
+    </section>
+
+    <!-- ===== TIPS ===== -->
+    <section id="tips" class="day-section">
+      <p class="section-intro">כמה דגשים קטנים שעוזרים לכל הסיפור הזה לזרום בנעימים 💡</p>
+
+      <div class="tip-card">
+        <button class="tip-toggle" aria-expanded="false">
+          <span class="icon">🍽️</span>
+          <span class="label">להכין את הארוחות מראש</span>
+          <span class="chev">▾</span>
+        </button>
+        <div class="tip-body">
+          <p>כדאי שהארוחות יהיו מוכנות כ-10 דקות עד רבע שעה לפני השעה הרשומה. ואם היא רעבה – אין שום בעיה להקדים ולתת לה.</p>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <button class="tip-toggle" aria-expanded="false">
+          <span class="icon">⏱️</span>
+          <span class="label">המתנה לפני שינה</span>
+          <span class="chev">▾</span>
+        </button>
+        <div class="tip-body">
+          <p>כדי לעזור לה לעכל בנוחות ולהירדם ברוגע, כדאי להמתין כ-15 דקות מסיום האוכל לפני ההשכבה לשינה.</p>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <button class="tip-toggle" aria-expanded="false">
+          <span class="icon">🛏️</span>
+          <span class="label">השכבה עצמאית</span>
+          <span class="chev">▾</span>
+        </button>
+        <div class="tip-body">
+          <p>המטרה היא לעזור לה להירדם במיטה שלה באופן עצמאי. לאחר טקס ערב רגוע (כולל חיבוק ושיר), מניחים אותה במיטה, נותנים מוצץ וכמה ליטופים מרגיעים – ויוצאים מהחדר.</p>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <button class="tip-toggle" aria-expanded="false">
+          <span class="icon">😢</span>
+          <span class="label">איך מגיבים לבכי</span>
+          <span class="chev">▾</span>
+        </button>
+        <div class="tip-body">
+          <p>אפשר להיכנס לחדר, לתת שוב כמה ליטופים מרגיעים, ולעזור לה לשים מוצץ בפה – בלי להרים אותה מהמיטה – ולצאת שוב. המטרה היא להעניק לה ביטחון ונוכחות, ולעודד אותה להירדם בכוחות עצמה.</p>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <button class="tip-toggle" aria-expanded="false">
+          <span class="icon">🥕</span>
+          <span class="label">נשנושים בין הארוחות</span>
+          <span class="chev">▾</span>
+        </button>
+        <div class="tip-body">
+          <p>אפשר להציע נשנושים נגישים, כמו חתיכת פרי או ירק רך שמתאימים לאחיזה ביד. מקסים לראות אותה מתנסה בזה!</p>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <button class="tip-toggle" aria-expanded="false">
+          <span class="icon">💛</span>
+          <span class="label">גמישות זה בסדר</span>
+          <span class="chev">▾</span>
+        </button>
+        <div class="tip-body">
+          <p>הלו"ז נועד לעשות סדר ולתת ביטחון לכולנו – אבל תמיד אפשר לזרום איתה ולהיות קשובים לרצונות שלה. אם היא צריכה כמה דקות לכאן או לכאן, זה סבבה. העיקר שתהיה רגועה ושמחה.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SHOPPING ===== -->
+    <section id="shopping" class="day-section">
+      <div class="shop-progress">
+        <span id="shop-count">0 / 0 נרכשו</span>
+        <button id="shop-reset" type="button">נקה סימונים</button>
+      </div>
+      <p class="shop-note">הרשימה מבוססת על סדר היום של נעמי. כדאי לתאם עם ההורים כמויות מדויקות, מותגים מועדפים ומידת חיתולים.</p>
+
+      <div class="shop-category">
+        <h3>🍌 פירות וירקות</h3>
+        <label class="shop-item"><input type="checkbox"><span>בננות</span></label>
+        <label class="shop-item"><input type="checkbox"><span>תפוחים</span></label>
+        <label class="shop-item"><input type="checkbox"><span>תותים</span></label>
+        <label class="shop-item"><input type="checkbox"><span>שזיפים</span></label>
+        <label class="shop-item"><input type="checkbox"><span>אגסים</span></label>
+        <label class="shop-item"><input type="checkbox"><span>תמרים</span></label>
+        <label class="shop-item"><input type="checkbox"><span>ירקות לבישול (לארוחת הצהריים)</span></label>
+        <label class="shop-item"><input type="checkbox"><span>פרי/ירק רך לנשנוש, לאחיזה ביד</span></label>
+      </div>
+
+      <div class="shop-category">
+        <h3>🌾 דגנים ותוספות</h3>
+        <label class="shop-item"><input type="checkbox"><span>קינואה</span></label>
+        <label class="shop-item"><input type="checkbox"><span>שיבולת שועל (פתיתים או קמח)</span></label>
+        <label class="shop-item"><input type="checkbox"><span>אבקת דגנים לתינוקות</span></label>
+        <label class="shop-item"><input type="checkbox"><span>חמאת שקדים</span></label>
+        <label class="shop-item"><input type="checkbox"><span>טחינה גולמית</span></label>
+      </div>
+
+      <div class="shop-category">
+        <h3>🍗 חלבון</h3>
+        <label class="shop-item"><input type="checkbox"><span>עוף (לארוחת הצהריים)</span></label>
+      </div>
+
+      <div class="shop-category">
+        <h3>🍼 ציוד האכלה</h3>
+        <label class="shop-item"><input type="checkbox"><span>סינר</span></label>
+        <label class="shop-item"><input type="checkbox"><span>קערית</span></label>
+        <label class="shop-item"><input type="checkbox"><span>כפית</span></label>
+      </div>
+
+      <div class="shop-category">
+        <h3>🧸 ציוד יומי</h3>
+        <label class="shop-item"><input type="checkbox"><span>טיטולי פמפרס מידה 2 (מתאים ל-5 ק"ג, הטווח הוא כ-4–8 ק"ג)</span></label>
+        <label class="shop-item"><input type="checkbox"><span>מגבונים (אני מביאה)</span></label>
+        <label class="shop-item"><input type="checkbox"><span>שמן שקדים</span></label>
+        <label class="shop-item"><input type="checkbox"><span>מוצצים (אני מביאה)</span></label>
+      </div>
+
+      <div class="shop-category">
+        <h3>🛁 ערב ושינה</h3>
+        <label class="shop-item"><input type="checkbox"><span>סבון / שמפו עדין לתינוקות</span></label>
+      </div>
+
+      <div class="shop-category prep-category">
+        <h3>📝 סידורים להכנה מראש</h3>
+        <p class="shop-note" style="margin:0 4px 12px;">אלה לא דברים לקנייה – פשוט כדאי להכין ולהניח בהישג יד מראש 💛</p>
+        <label class="shop-item"><input type="checkbox"><span>מגבת רחצה מוכנה ליד האמבט</span></label>
+        <label class="shop-item"><input type="checkbox"><span>ספר קצר לסיפור לפני השינה</span></label>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="tabbar" aria-label="ניווט בין חלקי היום">
+    <button class="tab active" data-target="morning"><span class="tab-icon">☀️</span><span>בוקר</span></button>
+    <button class="tab" data-target="noon"><span class="tab-icon">🌤️</span><span>צהריים</span></button>
+    <button class="tab" data-target="evening"><span class="tab-icon">🌙</span><span>ערב</span></button>
+    <button class="tab" data-target="tips"><span class="tab-icon">💡</span><span>טיפים</span></button>
+    <button class="tab" data-target="shopping"><span class="tab-icon">🛒</span><span>קניות</span></button>
+  </nav>
+
+</div>
+
+<script>
+  // ---- Tab / thread navigation ----
+  var navButtons = document.querySelectorAll('[data-target]');
+  function goTo(target){
+    document.querySelectorAll('.day-section').forEach(function(s){
+      s.classList.toggle('active', s.id === target);
+    });
+    navButtons.forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-target') === target);
+    });
+    document.querySelector('.content').scrollIntoView({block:'start', behavior:'smooth'});
+  }
+  navButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      goTo(btn.getAttribute('data-target'));
+    });
+  });
+
+  // ---- Tips accordion ----
+  document.querySelectorAll('.tip-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.tip-card');
+      var body = card.querySelector('.tip-body');
+      var isOpen = card.classList.contains('open');
+      if(isOpen){
+        card.classList.remove('open');
+        body.style.maxHeight = null;
+        btn.setAttribute('aria-expanded','false');
+      } else {
+        card.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+
+  // ---- Shopping list ----
+  var checkboxes = document.querySelectorAll('.shop-item input[type="checkbox"]');
+  var countEl = document.getElementById('shop-count');
+  function updateCount(){
+    var total = checkboxes.length;
+    var checked = 0;
+    checkboxes.forEach(function(cb){ if(cb.checked) checked++; });
+    countEl.textContent = checked + ' / ' + total + ' נרכשו';
+  }
+  checkboxes.forEach(function(cb){
+    cb.addEventListener('change', function(){
+      cb.closest('.shop-item').classList.toggle('checked-row', cb.checked);
+      updateCount();
+    });
+  });
+  document.getElementById('shop-reset').addEventListener('click', function(){
+    checkboxes.forEach(function(cb){
+      cb.checked = false;
+      cb.closest('.shop-item').classList.remove('checked-row');
+    });
+    updateCount();
+  });
+  updateCount();
+</script>
+</body>
+</html>
