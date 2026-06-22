@@ -43,28 +43,19 @@
   .app{max-width:560px;margin:0 auto;min-height:100vh;position:relative;}
 
   /* ---------- Header ---------- */
-  .topbar{padding:28px 20px 18px;}
-  .topbar-inner{display:flex;flex-direction:row;align-items:center;gap:12px;padding:0 20px;}
-  .badge{
-    display:inline-block;
-    background:var(--mustard-soft);
-    color:var(--mustard);
-    border:1.5px solid var(--mustard);
-    border-radius:999px;
-    padding:5px 16px;
-    font-size:0.95rem;
-    font-weight:700;
-    margin-right:auto;
-  }
+  .topbar{padding:20px 20px;}
+  .topbar-toggle{display:flex;justify-content:flex-start;margin-bottom:24px;}
   .topbar h1{
     font-size:1.9rem;
     color:var(--teal-dark);
     margin-bottom:6px;
+    text-align:center;
   }
   .topbar .subtitle{
     color:var(--ink-soft);
     font-size:1.05rem;
     margin:0;
+    text-align:center;
   }
 
   /* ---------- Language toggle ---------- */
@@ -76,7 +67,6 @@
     padding:2px 6px;
     gap:0;
     flex-direction:row-reverse;
-    margin-left:auto;
   }
   .lang-btn{
     background:none;
@@ -383,12 +373,6 @@
   /* Language toggle - fixed order */
   html.es .lang-toggle{
     flex-direction:row;
-    margin-left:0;
-    margin-right:auto;
-  }
-  html.es .badge{
-    margin-right:0;
-    margin-left:auto;
   }
 </style>
 </head>
@@ -396,20 +380,16 @@
 <div class="app">
 
   <header class="topbar">
-    <div style="width:100%;text-align:center;">
-      <div class="topbar-inner">
-        <div class="lang-toggle">
-          <button class="lang-btn es-btn" data-lang="es">ES 🇪🇸</button>
-          <button class="lang-btn he-btn active" data-lang="he">HE 🇮🇱</button>
-        </div>
-        <span class="badge badge-he">גיל חצי שנה 👶</span>
-        <span class="badge badge-es" style="display:none;">Edad: 6 meses 👶</span>
+    <div class="topbar-toggle">
+      <div class="lang-toggle">
+        <button class="lang-btn es-btn" data-lang="es">ES 🇪🇸</button>
+        <button class="lang-btn he-btn active" data-lang="he">HE 🇮🇱</button>
       </div>
-      <h1 class="title-he">סדר היום של נעמי</h1>
-      <h1 class="title-es" style="display:none;">Horario Diario de Naomi</h1>
-      <p class="subtitle subtitle-he">מדריך קטן לסבתא ולסבא, באהבה 💛</p>
-      <p class="subtitle subtitle-es" style="display:none;">Guía para abuela y abuelo, con amor 💛</p>
     </div>
+    <h1 class="title-he">סדר היום של נעמי (גיל 6 חודשים)</h1>
+    <h1 class="title-es" style="display:none;">Horario Diario de Naomi (Edad: 6 meses)</h1>
+    <p class="subtitle subtitle-he">מדריך קטן לסבתא ולסבא, באהבה 💛</p>
+    <p class="subtitle subtitle-es" style="display:none;">Guía para abuela y abuelo, con amor 💛</p>
   </header>
 
   <nav class="thread" aria-label="קצב היום">
